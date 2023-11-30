@@ -29,11 +29,11 @@ double comp_TC(tgraph& G, vector<sedge>& ans_edge)
 				continue;
 			
 			bool v_isin = ans.find(v) == ans.end() ? 0 : 1;
-			if (u_isin ^ v_isin)			//两个点只有一个在S中
+			if (u_isin ^ v_isin)			
 				tcut += tnum;
-			if (u_isin && v_isin)		//两个点任意一个在S中
+			if (u_isin && v_isin)		
 				tvol1 += tnum;
-			if (!u_isin && !v_isin)	//两个点任意一个不在S中
+			if (!u_isin && !v_isin)	
 				tvol2 += tnum;
 		}
 	}
@@ -68,7 +68,7 @@ double comp_EDB(tgraph& G, vector<sedge>& ans_edge)
 				continue;
 
 			bool v_isin = ans.find(v) == ans.end() ? 0 : 1;
-			if (u_isin && v_isin)			//两个点只有一个在S中
+			if (u_isin && v_isin)			
 			{
 				in_edge += tnum;
 				min_t = min(mp.second.TS[0], min_t);

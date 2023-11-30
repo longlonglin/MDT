@@ -16,7 +16,7 @@
 
 class ListLinearHeap {
 private:
-	ui n; // number vertices,   节点的数目，节点id不一定需要连续，但是数目需要正确
+	ui n; // number vertices,   
 	ui key_cap; // the maximum allowed key value
 
 	ui max_key; // possible max key
@@ -70,7 +70,7 @@ public:
 		for (ui i = 0; i <= _key_cap; i++)
 			heads[i] = n;
 
-		for (ui i = 0; i < _n; i++)         //这里的i<_n没有发挥作用
+		for (ui i = 0; i < _n; i++)         
 		{
 			insert(_ids[i], _keys[i]);
 		}
@@ -78,7 +78,7 @@ public:
 
 	// insert (id, key) pair into the data structure
 	void insert(ui id, ui key) {
-		assert(id < n); assert(key <= key_cap);    //这里的id<n
+		assert(id < n); assert(key <= key_cap);    
 		//assert(keys[id] > key_cap);
 
 		keys[id] = key; pres[id] = n; nexts[id] = heads[key];

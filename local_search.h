@@ -208,17 +208,17 @@ vector<int> shrink_prune(tgraph& Gs, int q, int maxsup, int delta, int& ansk,int
 
 	while (!heap.empty() && q_edge >= 2)
 	{
-		recover_edge.clear();						//还能进入循环表明，上一圈被完整删除了
+		recover_edge.clear();						
 		int eid_min, sup_min;
-		heap.get_min(eid_min, sup_min);				//取出了当前sup最小的边，作为本轮的k值
-		ansk = sup_min;								//最大的k值
+		heap.get_min(eid_min, sup_min);				
+		ansk = sup_min;								
 		
-		while (!heap.empty() && q_edge >= 2)							//迭代删除小于k的边
+		while (!heap.empty() && q_edge >= 2)							
 		{
 			int eid_i, supl;
 			heap.get_min(eid_i, supl);
 
-			if (supl <= sup_min)					//当前值小于等于本轮k值，最多只能保留到本轮
+			if (supl <= sup_min)					
 			{
 				edge_del[eid_i]=true;
 				heap.pop_min(eid_i, supl);
@@ -228,7 +228,7 @@ vector<int> shrink_prune(tgraph& Gs, int q, int maxsup, int delta, int& ansk,int
 				if (q == id1 || q == id2)
 					q_edge--;
 
-				for (auto& id3_ifo : Gs.etriangle[eid_i])					//记录的是已经存在的三角形，但是如果有不存在的边访问，则会将那个三角形的值置为0,同时也会产生不存在的边，然后边的id值就为0
+				for (auto& id3_ifo : Gs.etriangle[eid_i])					
 				{					
 					int id3 = id3_ifo.first, dec = id3_ifo.second;
 					if (dec == 0)
@@ -240,7 +240,7 @@ vector<int> shrink_prune(tgraph& Gs, int q, int maxsup, int delta, int& ansk,int
 
 					if (edge_del[eid13]==false && edge_del[eid23] == false)
 					{
-						if (heap.get_key(eid13) > sup_min)				   //只用更新大于sup_min的值，小于的本来就会被删除
+						if (heap.get_key(eid13) > sup_min)				  
 							heap.decrement(eid13, dec);
 						if (heap.get_key(eid23) > sup_min)
 							heap.decrement(eid23, dec);
@@ -252,9 +252,9 @@ vector<int> shrink_prune(tgraph& Gs, int q, int maxsup, int delta, int& ansk,int
 		}
 	}
 	
-	if ( ansk>=midk && q_edge < 2)			//ansk满足要求才恢复结果，送入check——connect
+	if ( ansk>=midk && q_edge < 2)			
 	{
-		while (!heap.empty())				//此时至少包含q的两条边，感觉不太对，应该是要记录进入当前圈的k的所有剩余边？所以需要在迭代删的时候记下来这些边，后面加上que里剩下的
+		while (!heap.empty())				
 		{
 			int e, s;
 			heap.pop_min(e, s);
@@ -276,29 +276,29 @@ vector<int> shrink_prune(tgraph& Gs, int q, int maxsup, int delta, int& ansk,int
 void expand(tgraph& G,vector<int>& expand_comu,vector<int>& new_edge, vector<unordered_set<int>>& non_temptri, queue<int>& que, vector<int8_t>& vis,int midk, int delta, int& maxnode, int check_size)
 {
 
-	vector<unordered_set<int>> trian_vis(G.edge_num);			/*标记访问过的三角形防止通过不同的边重复访问*/
+	vector<unordered_set<int>> trian_vis(G.edge_num);			
 	unordered_set<int> cur_que;
-	unordered_set<int> cur_vis;									//当前访问过的边已经加入队列que了但是还没来的及放入expand——comu, cur_vis中的最终都会加入expand——commu
+	unordered_set<int> cur_vis;									
 
-	while (!que.empty())																			//遍历上一轮不合格的边（sup值已知的），并展开扩展
+	while (!que.empty())																			
 	{
 		int cur = que.front();
 		que.pop();
 		int x = G.eid_touv[cur].first, y = G.eid_touv[cur].second;
 
-		if ((check_size > 0 && G.eedge_sup[cur] >= midk) || check_size <= 0)						//需要检查sup的边 
+		if ((check_size > 0 && G.eedge_sup[cur] >= midk) || check_size <= 0)					 
 		{
 			check_size--;
 			expand_comu.emplace_back(cur);
-			new_edge.emplace_back(cur);																//这里为什么会有重复的边: 因为有的边不是通过扩展加进来的（符合要求且已经在队列然后又通过别的边加入队列），而是对不合格的边进行检查，所以在合格就要标记
+			new_edge.emplace_back(cur);																
 			maxnode = max(maxnode, max(x, y));
 			vis[cur] = 1;															
 			//maxsup = max(maxsup, G.eedge_sup[cur]);
 
-			for (auto& z_ifo : G.etriangle[cur])		//这里能用vtriangle,是因为（x,y）sup值已知，所有的（x,y,w）全部找出来了, 使用vtriangle无形中限制了必须是时态三角形,但是其数量可能是0
+			for (auto& z_ifo : G.etriangle[cur])		
 			{
 				int z = z_ifo.first;
-				if (z_ifo.second == 0)				//如果不构成时态三角形，则继续下一个点
+				if (z_ifo.second == 0)				
 				{
 					if (y < z)
 						non_temptri[cur].insert(z);
@@ -356,7 +356,7 @@ void expand(tgraph& G,vector<int>& expand_comu,vector<int>& new_edge, vector<uno
 					}
 				}
 
-				if (vis[eidxz]==0)			//合格的能够继续扩展的边(没有被标记过的）
+				if (vis[eidxz]==0)			
 				{
 					que.push(eidxz);
 					vis[eidxz] = 1;
@@ -388,7 +388,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 	G.etriangle.clear();
 
 	G.etriangle.resize(G.edge_num);
-	G.eedge_sup.resize(G.edge_num,-1);			//初始化为-1标记为还没计算过
+	G.eedge_sup.resize(G.edge_num,-1);			
 
 	//cout << "q: " << q << "  ";
 
@@ -398,7 +398,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 
 	int round=0,expand_size=0;
 
-	for (const auto& v_ifo : G.nodes[q].TE)				//计算q参与的边的sup的范围
+	for (const auto& v_ifo : G.nodes[q].TE)				
 	{
 		int u = q, v = v_ifo.first;
 		if (u > v)
@@ -427,11 +427,11 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 	}
 	int midk;
 
-	//每次扩展的时候都会有不满足条件的边，吧这些边记录下来，第二次扩展就关注这些边(并从这些边继续扩展，继续记录不合格的边）
+	
 	vector<int> expand_comu;
 
-	vector<unordered_set<int>> non_temptri(G.edge_num);			//用来记录非时态三角形
-	int maxnode = q, maxsup = 0;								//为后面扫描子图做准备
+	vector<unordered_set<int>> non_temptri(G.edge_num);			
+	int maxnode = q, maxsup = 0;								
 	tgraph Gs;
 	vector<int8_t> vis(G.edge_num, 0);
 	bool fir_round = true;
@@ -446,17 +446,17 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 
 		midk = (mink + maxk) / 2;
 
-		if (fir_round)								//表明这是第一次扩展,需要从que开始扩展, 如果是第二次扩展，就只用检查unvalid_edge
+		if (fir_round)								
 		{
 			fir_round = false;
-			for (const auto& v_ifo : G.nodes[q].TE)							//重新生成que;
+			for (const auto& v_ifo : G.nodes[q].TE)						
 			{
 				int u = q, v = v_ifo.first;
 				if (u > v)
 					swap(u, v);
 				int eid = G.vedge_set[u][v];
 				
-				if (G.eedge_sup[eid] >= midk)					//初始化que为与q相关的边。这里不用把小于midk的记录是因为，记录的工作都留给expand阶段扩展的时候去做
+				if (G.eedge_sup[eid] >= midk)					
 				{
 					que.push(eid);
 					vis[eid] = 1;
@@ -469,7 +469,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 			exp_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
 			gettimeofday(&s_t, 0);
-			scan_subgraph(G, Gs, new_edge, maxnode);	    //将第一次搜索到的子图进行重新扫描,每次重新扫描耗时，应该是更新子图，计算sup值也应该是更新（新加进来的边参与了哪些三角形，新形成了哪些三角形）
+			scan_subgraph(G, Gs, new_edge, maxnode);	   
 			maxsup=count_global_sup(Gs, delta);			
 			gettimeofday(&e_t, 0);
 			sc_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
@@ -482,7 +482,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 			exp_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
 			gettimeofday(&s_t, 0);
-			unordered_set<int> ngra_edge = scan_subgraph(G, Gs, new_edge, maxnode);	    //将第一次搜索到的子图进行重新扫描,每次重新扫描耗时，应该是更新子图，计算sup值也应该是更新（新加进来的边参与了哪些三角形，新形成了哪些三角形）
+			unordered_set<int> ngra_edge = scan_subgraph(G, Gs, new_edge, maxnode);	
 			update_sup(Gs, ngra_edge, delta, maxsup);
 			gettimeofday(&e_t, 0);
 			sc_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
@@ -499,7 +499,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 		int ansk = 0;
 
 		gettimeofday(&s_t, 0);
-		vector<int> ans1 = shrink_prune(Gs, q, maxsup, delta, ansk,midk);		//得到sup大于k的子图
+		vector<int> ans1 = shrink_prune(Gs, q, maxsup, delta, ansk,midk);		
 		gettimeofday(&e_t, 0);
 		shrink_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
@@ -510,7 +510,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta,string file)
 		// cout << "   scan&comp time: " << sc_time << "ms";
 		// cout << "   shrink time: " << shrink_time << "ms";
 
-		if (ansk == 0)							//没有结果
+		if (ansk == 0)							
 			maxk = midk;
 		else if (ansk < midk)
 		{
@@ -550,7 +550,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 	G.etriangle.clear();
 
 	G.etriangle.resize(G.edge_num);
-	G.eedge_sup.resize(G.edge_num,-1);			//初始化为-1标记为还没计算过
+	G.eedge_sup.resize(G.edge_num,-1);			
 
 	// cout << "q: " << q << "  ";
 
@@ -559,7 +559,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 	vector<vector<sedge>> solution;
 
 
-	for (const auto& v_ifo : G.nodes[q].TE)				//计算q参与的边的sup的范围
+	for (const auto& v_ifo : G.nodes[q].TE)				
 	{
 		int u = q, v = v_ifo.first;
 		if (u > v)
@@ -579,11 +579,11 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 		return solution;
 	int midk;
 
-	//每次扩展的时候都会有不满足条件的边，吧这些边记录下来，第二次扩展就关注这些边(并从这些边继续扩展，继续记录不合格的边）
+	
 	vector<int> expand_comu;
 
-	vector<unordered_set<int>> non_temptri(G.edge_num);			//用来记录非时态三角形
-	int maxnode = q, maxsup = 0;								//为后面扫描子图做准备
+	vector<unordered_set<int>> non_temptri(G.edge_num);			
+	int maxnode = q, maxsup = 0;								
 	tgraph Gs;
 	vector<int8_t> vis(G.edge_num, 0);
 	bool fir_round = true;
@@ -597,17 +597,17 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 
 		midk = (mink + maxk) / 2;
 
-		if (fir_round)								//表明这是第一次扩展,需要从que开始扩展, 如果是第二次扩展，就只用检查unvalid_edge
+		if (fir_round)								
 		{
 			fir_round = false;
-			for (const auto& v_ifo : G.nodes[q].TE)							//重新生成que;
+			for (const auto& v_ifo : G.nodes[q].TE)							
 			{
 				int u = q, v = v_ifo.first;
 				if (u > v)
 					swap(u, v);
 				int eid = G.vedge_set[u][v];
 				
-				if (G.eedge_sup[eid] >= midk)					//初始化que为与q相关的边。这里不用把小于midk的记录是因为，记录的工作都留给expand阶段扩展的时候去做
+				if (G.eedge_sup[eid] >= midk)				
 				{
 					que.push(eid);
 					vis[eid] = 1;
@@ -620,7 +620,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 			exp_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
 			gettimeofday(&s_t, 0);
-			scan_subgraph(G, Gs, new_edge, maxnode);	    //将第一次搜索到的子图进行重新扫描,每次重新扫描耗时，应该是更新子图，计算sup值也应该是更新（新加进来的边参与了哪些三角形，新形成了哪些三角形）
+			scan_subgraph(G, Gs, new_edge, maxnode);	   
 			maxsup=count_global_sup(Gs, delta);			
 			gettimeofday(&e_t, 0);
 			sc_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
@@ -633,7 +633,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 			exp_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
 			gettimeofday(&s_t, 0);
-			unordered_set<int> ngra_edge = scan_subgraph(G, Gs, new_edge, maxnode);	    //将第一次搜索到的子图进行重新扫描,每次重新扫描耗时，应该是更新子图，计算sup值也应该是更新（新加进来的边参与了哪些三角形，新形成了哪些三角形）
+			unordered_set<int> ngra_edge = scan_subgraph(G, Gs, new_edge, maxnode);	   
 			update_sup(Gs, ngra_edge, delta, maxsup);
 			gettimeofday(&e_t, 0);
 			sc_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
@@ -648,7 +648,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 		int ansk = 0;
 
 		gettimeofday(&s_t, 0);
-		vector<int> ans1 = shrink_prune(Gs, q, maxsup, delta, ansk,midk);		//得到sup大于k的子图
+		vector<int> ans1 = shrink_prune(Gs, q, maxsup, delta, ansk,midk);		
 		gettimeofday(&e_t, 0);
 		shrink_time = (e_t.tv_sec - s_t.tv_sec) * 1000 + (e_t.tv_usec - s_t.tv_usec) / 1000;
 
@@ -659,7 +659,7 @@ vector<vector<sedge>> local_search(tgraph& G, int q, int delta)
 		// cout << "   scan&comp time: " << sc_time << "ms";
 		// cout << "   shrink time: " << shrink_time << "ms";
 
-		if (ansk == 0)							//没有结果
+		if (ansk == 0)						
 			maxk = midk;
 		else if (ansk < midk)
 		{

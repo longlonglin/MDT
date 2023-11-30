@@ -321,14 +321,14 @@ void query_expand_ans_size(tgraph& G, string file, int delta)
 
 }
 
-void query_time_varydeg(tgraph& G, string file, int per)			//Ã¿´Î²éÑ¯¶¼ÊÇµ¥¶ÀµÄ£¬²»ÒÀÀµÓÚÖ®Ç°ÒÑ¾­¼ÆËã¹ıµÄ±ßµÄsupÖµ¡£
+void query_time_varydeg(tgraph& G, string file, int per)			
 {
 	int delta = 8;
 	string index = "./index/" + file + "_edge.txt";
 	string tri_index = "./index/" + file + "_tri.txt";
 	string query_node = "./seed/" + file + "_seed_"+to_string(per)+".txt";
 
-	//Ê¹ÓÃÄ¬ÈÏµÄdelta=8
+	
 	string comp_time = "./ans/time/" + file + "_time_" + to_string(per) + ".txt";
 
 	int local_time = 0, index_time = 0, global_time = 0;
@@ -412,7 +412,7 @@ void query_time_varydeg(tgraph& G, string file, int per)			//Ã¿´Î²éÑ¯¶¼ÊÇµ¥¶ÀµÄ£
 
 
 
-void query_time(tgraph& G, string file, int delta)			//Ã¿´Î²éÑ¯¶¼ÊÇµ¥¶ÀµÄ£¬²»ÒÀÀµÓÚÖ®Ç°ÒÑ¾­¼ÆËã¹ıµÄ±ßµÄsupÖµ¡£
+void query_time(tgraph& G, string file, int delta)			
 {
 	string index = "./index/" + file + "_edge.txt";
 	string tri_index = "./index/" + file + "_tri.txt";
@@ -603,7 +603,7 @@ void select_seed_bytemp(tgraph& G, string file, double per)
 	for (int i = 0; i < G.maxid + 1; i++)
 	{
 		vector<int> vec(2);
-		if (G.nodes[i].TE.size() == 0)			//¶ÈÊıÎª0¾Í²»¹ÜÁË
+		if (G.nodes[i].TE.size() == 0)			
 			continue;
 		vec[0] = i;
 		int temp_deg = 0;
@@ -663,7 +663,7 @@ void select_seed(tgraph& G, string file)
 	for (int i = 0; i < G.maxid + 1; i++)
 	{
 		vector<int> vec(2);
-		if (G.nodes[i].TE.size() == 0)			//¶ÈÊıÎª0¾Í²»¹ÜÁË
+		if (G.nodes[i].TE.size() == 0)			
 			continue;
 		vec[0] = i;
 		int temp_deg = 0;
@@ -725,7 +725,7 @@ void select_seed_varydeg(tgraph& G, string file)
 	for (int i = 0; i < G.maxid + 1; i++)
 	{
 		vector<int> vec(2);
-		if (G.nodes[i].TE.size() == 0)			//¶ÈÊıÎª0¾Í²»¹ÜÁË
+		if (G.nodes[i].TE.size() == 0)			
 			continue;
 		vec[0] = i;
 		int temp_deg = 0;
@@ -791,7 +791,7 @@ void select_seed_degslice(tgraph& G, string file)
 	for (int i = 0; i < G.maxid + 1; i++)
 	{
 		vector<int> vec(2);
-		if (G.nodes[i].TE.size() == 0)			//¶ÈÊıÎª0¾Í²»¹ÜÁË
+		if (G.nodes[i].TE.size() == 0)		
 			continue;
 		vec[0] = i;
 		int temp_deg = 0;
@@ -871,7 +871,7 @@ void select_seed_withtruss(tgraph& G, string file)
 	for (int i = 0; i < G.maxid + 1; i++)
 	{
 		vector<int> vec(2);
-		if (G.nodes[i].TE.size() == 0)			//¶ÈÊıÎª0¾Í²»¹ÜÁË
+		if (G.nodes[i].TE.size() == 0)			
 			continue;
 		vec[0] = i;
 		int temp_deg = 0;
