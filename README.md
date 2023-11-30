@@ -38,6 +38,9 @@ print.h contains some print output functions.
 /seed: contains various selected query nodes.
 
 To compile and run the code:
+
 g++ -std=c++11 main.cpp -o main // Compile
-./main // Run
-// Modify the function calls in the main function to invoke different algorithms.
+
+./main 				// Run
+
+Ps: Modify the function calls in the main function to invoke different algorithms.
