@@ -1,28 +1,19 @@
-代码包含了三种搜索策略：全局策略、局部策略、索引策略
 
-Graph_IO.h 从/data中读取数据并存储到内存。
+Note that DBLP is too large to upload to GitHub, you can download it from  http://konect.cc/networks/dblp_coauthor/ or https://dblp.uni-trier.de/xml/
 
-global.h 全局策略思想：先计算所有边的TSup值，然后迭代删除时序支持度最低的边的，同时更新与其在同一三角形内的其他边的时序支持度，继续进行下一轮搜索
-直到当前的查询顶点q不能参与到任何三角形中，算法终止。
+Other datasets also can be downloaded in the following way.
 
-local_search.h 局部策略：从查询顶点q诱导的边开始，先计算其时序支持度然后获取上届和下界，此时就能直到k*的上下界。同时采用二分的方法选取扩展阈值k，
-将全局时序支持度大于k的边收集起来作为扩展子图，然后在当前扩展子图上基于全局策略去寻找目标社区。刚开始的k值很大，所以扩展子图会比较小，如此
-可能要经过好几轮扩展子图才会找到最终的目标社区。因此，后续的每一轮扩展都是在前一轮的基础上进行，同时标记每轮在当前k下未能加入扩展子图的边，
-下一轮扩展就可以优先检查这些边。
+Rmin can be downloaded from http://konect.cc/networks/mit/
 
-build_index.h 构建索引：要计算0~tmax下所有边的时序支持度。具体实现参考论文里面的思路，主要思想是尽量少访问边和三角形，并在\delta-1的基础上
-计算\delta下的时序支持度。
+Lyon and Thiers can be downloaded from http://www.sociopatterns.org/datasets/co-location-data-for-several-sociopatterns-data-sets/
 
-index_search.h 索引策略：查询索引，通过获取q诱导的边的时序支持度可以快速确定k*的值，所以只需要不停地以目标社区中的边向外扩展就可以很快
-地确定当前边是否能出现在最终的目标社区里面。
+Facebook can be downloaded from  http://konect.cc/networks/facebook-wosn-wall/
 
-print.h 一些打印输出函数
-/data: 放了处理好的数据集
-/index: 构建好的索引
-/seed：选取的各种查询节点
+Twitter can be downloaded from http://snap.stanford.edu/data/higgs-twitter.html
 
-编译运行：
-g++ -std=c++11 main.cpp -o main   //编译
-./main							  //运行
-//调用不同的算法需要修改main函数里的调用
+Enron can be downloaded from http://konect.cc/networks/enron-rm/
+
+Lkml can be downloaded from http://konect.cc/networks/lkml-reply/
+
+
 
