@@ -33,9 +33,12 @@ build_index.h builds the index: it calculates the temporal support of all edges 
 index_search.h implements the index strategy: it utilizes the query index to quickly determine the value of k* by obtaining the temporal support of edges induced by q. Therefore, it only needs to continuously expand outward using the edges in the target community to quickly determine whether the current edge can appear in the final target community.
 
 print.h contains some print output functions.
+
 /data: contains processed datasets.
+
 /index: contains the built index.
-/seed: contains various selected query nodes.
+
+/seed: contains various selected query nodes, which can provide you with a reference.
 
 To compile and run the code:
 
