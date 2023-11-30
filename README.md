@@ -38,8 +38,6 @@ print.h contains some print output functions.
 
 /index: contains the built index.
 
-/seed: contains various selected query nodes, which can provide you with a reference.
-
 To compile and run the code:
 
 g++ -std=c++11 main.cpp -o main // Compile
