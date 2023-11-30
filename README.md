@@ -2,54 +2,42 @@
 
 This repository contains a reference implementation of the algorithms for the paper:
 
-Pingpeng Yuan, Longlong Lin, Chunxue Zhu, Hai Jin. anonymous. Submit to ICDE2024.
+Pingpeng Yuan, Longlong Lin*, Chunxue Zhu, Hai Jin. anonymous. Submit to ICDE2024.
 
 ## Environment
 
-Codes run on  on a server with an Xeon 2.00GHz and 256GB memory running Ubun
+Codes run on a server with an Xeon 2.00GHz and 256GB memory running Ubuntu 18.04
 
 ## Dataset file format
 
-### Input file format
+- Each event (i.e., temporal edge) consists of vertex1, vertex2, timestamp
 
-- The input file should be started with V and E
+	- vertex1, vertex2: participate in the vertices of the event
 
-	-  V: upper limit of node id or higher  
+	- timestamp: the time when the event happens
 
-	-  E: the number of edges
-
-- For each event, there are 3 parameters: vertex1, vertex2, time
-
-	- vertex1, vertex2: the vertices of the changing edge
-
-	- time: the time when the event happens
-
-- the time of any (vertex1,vertex2) must be sorted in ascending order
-
-### Output file format
-
-- There are two output files
-
-	- TGRA.txt : store the spent time of TGRA algorithm 
-
-	- res.(dataset) : dataset refers to dataset name, stroe the spent time of B&B algorithm
-
-- No matter how many times BB.cpp is excuted, we can get only one TGRA.txt file. That means TGRA.txt stores all TGRA algorithm result.
-
-- res.(dataset) is different, results of different parameters of one dataset share one dataset. That means one dataset outputs one res.(dataset) file.  
+- the timestamp of any event must be sorted in ascending order
 
 ## Compile and run
 
-1. create an excutable application by compiling "BB.cpp", for example:` g++ -o test BB.cpp`
+The code includes three search strategies: global strategy, local strategy, and index strategy.
 
-2. run the excutable application with 5 parameters, which are input file name, gamma,  mode, rho, theta, for example:` ./test enron 0.8 4 0.6 3`
+Graph_IO.h reads data from /data and stores it in memory.
 
-	- input file name: the name of the file describing the tempral graph
+global.h implements the global strategy: it first calculates the TSup value for all edges, then iteratively removes the edge with the lowest temporal support within a triangle and updates the temporal support of other edges within the same triangle. This process continues until the current query vertex q cannot participate in any triangle, and the algorithm terminates.
 
-	- gamma
+local_search.h implements the local strategy: it starts with the edges induced by the query vertex q, calculates their temporal support, and obtains the upper and lower bounds of k*. It uses binary search to select an expansion threshold k and collects the edges with global temporal support greater than k as the expansion subgraph. Then, based on the global strategy, it searches for the target community within the current expansion subgraph. Initially, the value of k is large, so the expansion subgraph may be relatively small. It may take several rounds of expanding the subgraph to find the final target community. Therefore, each subsequent round of expansion is built upon the previous round, and the edges that were not included in the expansion subgraph under the current k are marked for priority checking in the next round.
 
-	- mode: five pruning algorithms
+build_index.h builds the index: it calculates the temporal support of all edges from 0 to tmax. The specific implementation follows the ideas presented in the referenced paper, with the main idea being to minimize accessing edges and triangles, and calculate the temporal support at \delta based on \delta-1.
 
-	- tho
+index_search.h implements the index strategy: it utilizes the query index to quickly determine the value of k* by obtaining the temporal support of edges induced by q. Therefore, it only needs to continuously expand outward using the edges in the target community to quickly determine whether the current edge can appear in the final target community.
 
-	- theta
+print.h contains some print output functions.
+/data: contains processed datasets.
+/index: contains the built index.
+/seed: contains various selected query nodes.
+
+To compile and run the code:
+g++ -std=c++11 main.cpp -o main // Compile
+./main // Run
+// Modify the function calls in the main function to invoke different algorithms.
