@@ -5,7 +5,7 @@ Other datasets also can be downloaded in the following way.
 
 Rmin can be downloaded from http://konect.cc/networks/mit/
 
-Lyon and Thiers can be downloaded from http://www.sociopatterns.org/datasets/co-location-data-for-several-sociopatterns-data-sets/
+Lyon, primaryschool, Thiers can be downloaded from http://www.sociopatterns.org/datasets/co-location-data-for-several-sociopatterns-data-sets/
 
 Facebook can be downloaded from  http://konect.cc/networks/facebook-wosn-wall/
 
